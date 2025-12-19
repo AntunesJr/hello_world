@@ -15,7 +15,7 @@ display_footer(){
 
     #Barra de progresso visual:
     local pos
-    if [[ "total_pages" -gt 1 ]]; then
+    if [[ "$total_pages" -gt 1 ]]; then
        pos=$((current_page * $padding / (total_pages -1)))
     else
        pos=0
@@ -43,7 +43,7 @@ display_footer(){
 
     # Instruções de navegação:
     build_footer_message
-    echo -e "$footer_msg_format"
+    echo -ne "$footer_msg_format"
 }
 
 # Constrói a mensagem de rodapé:

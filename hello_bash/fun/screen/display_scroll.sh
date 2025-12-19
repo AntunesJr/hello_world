@@ -6,7 +6,7 @@
 
 # Quantidade de linhas o cabeçalho e rodapé ocupam:
 get_header_footer_lines(){
-    echo 12
+    echo 10
 }
 
 # Conta o total de linhas do conteúdo atual:
@@ -45,11 +45,41 @@ get_max_scroll_offset(){
 # Divide o conteúdo em uma array de linhas, possibilanto rolagem:
 split_content_into_lines(){
     local content="$1"
+    local width=$(get_terminal_width)
+    local max_chars=$((width - 2))
 
     CONTENT_LINES=()
 
     # Preserva linhas vazias e espaços no inicio das linhas:
     while IFS= read -r line || [[ -n "$line" ]]; do
-        CONTENT_LINES+=("$line")
+        # Verifica se a linha é vazia ou menor que o máximo de caracteches por linha:
+        if [[ -z "$line" ]] || [[ ${#line} -le $max_chars ]]; then
+            CONTENT_LINES+=("$line")
+        else # Caso seja maior que o número máximo de caracteres faz o tratamento:
+            local remaining="$line"
+            while [[ ${#remaining} -gt $max_chars ]]; do
+                local chunk="${remaining:0:$max_chars}"
+                local last_space=-1
+                local i
+                #procura o último espaço:
+                for ((i=${#chunk}-1; i>=0; i--)); do
+                    if [[ "${chunk:$i:1}" == " " ]]; then
+                        last_space=$i
+                        break
+                    fi
+                done
+
+                # Tenta quebrar linha no último espaço antes do limite:
+                if [[ "$last_space" -gt 0 ]]; then
+                    CONTENT_LINES+=("${remaining:0:$last_space}")
+                    remaining="${remaining:$((last_space + 1))}"
+                # Força quebra de linha no limite:
+                else
+                    CONTENT_LINES+=("$chunk")
+                    remaining="${remaining:${#chunk}}"
+                fi
+            done
+            [[ -n "$remaining" ]] && CONTENT_LINES+=("$remaining")
+        fi
     done <<< "$content"
 }

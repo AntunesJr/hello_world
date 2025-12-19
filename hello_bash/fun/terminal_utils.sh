@@ -67,7 +67,7 @@ get_terminal_height(){
     elif [ -n "$LINES" ]; then
         height=$LINES
     else
-        height=$(stty size 2>/dev/null | cut -d' ' -fi)
+        height=$(stty size 2>/dev/null | cut -d' ' -f1)
     fi
 
     echo "${height:-24}"

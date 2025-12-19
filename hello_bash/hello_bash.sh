@@ -51,6 +51,9 @@ main(){
     trap cleanup EXIT
     enable_raw_mode
 
+    sleep 0.05 #expectativa de comprar tempo para atualizar a tela
+    clear_safe
+
     while true; do
         display_page
         local key=$(read_key)
