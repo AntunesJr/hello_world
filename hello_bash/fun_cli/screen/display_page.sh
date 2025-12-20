@@ -3,8 +3,8 @@
 # ============================================================
 # Importar funções:
 # ============================================================
-source "${SCRIPT_DIR}/fun/screen/display_scroll.sh"
-source "${SCRIPT_DIR}/fun/screen/display_footer.sh"
+source "${SCRIPT_DIR}/fun_cli/screen/display_scroll.sh"
+source "${SCRIPT_DIR}/fun_cli/screen/display_footer.sh"
 
 # ============================================================
 # Função De Exibição:
