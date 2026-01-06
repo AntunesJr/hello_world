@@ -27,11 +27,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # ============================================================
 # Importar funções:
 # ============================================================
-source "${SCRIPT_DIR}/fun/screen/display_page.sh"
-source "${SCRIPT_DIR}/fun/load_pages_json.sh"
-source "${SCRIPT_DIR}/fun/terminal_utils.sh"
-source "${SCRIPT_DIR}/fun/scroll_page.sh"
-source "${SCRIPT_DIR}/fun/read_key.sh"
+source "${SCRIPT_DIR}/fun_cli/screen/display_page.sh"
+source "${SCRIPT_DIR}/fun_cli/load_pages_json.sh"
+source "${SCRIPT_DIR}/fun_cli/terminal_utils.sh"
+source "${SCRIPT_DIR}/fun_cli/scroll_page.sh"
+source "${SCRIPT_DIR}/fun_cli/read_key.sh"
 
 # ============================================================
 # Mensagens de Navegação:
@@ -51,12 +51,15 @@ main(){
     trap cleanup EXIT
     enable_raw_mode
 
-    sleep 0.05 #expectativa de comprar tempo para atualizar a tela
+    sleep 0.05
     clear_safe
+    
+    display_page  # Desenha UMA VEZ antes do loop
 
     while true; do
-        display_page
         local key=$(read_key)
+        local old_scroll=$scroll_offset
+        local old_page=$current_page
         
         case "$key" in
             "RIGHT")
@@ -95,6 +98,11 @@ main(){
                 break
                 ;;
         esac
+        
+        # Só redesenha SE algo mudou
+        if [[ "$old_scroll" -ne "$scroll_offset" || "$old_page" -ne "$current_page" ]]; then
+            display_page
+        fi
     done
 }
 

@@ -12,22 +12,28 @@ reset_scroll(){
 # Movimento do scroll para cima:
 scroll_up(){
     local amount=${1:-1}
+    local old_offset=$scroll_offset
 
     scroll_offset=$((scroll_offset - amount))
     if [ $scroll_offset -lt 0 ]; then
         scroll_offset=0
     fi
+
+    [[ $old_offset -ne $scroll_offset ]]
 }
 
 # Movimento do scroll para baixo:
 scroll_down(){
     local amount=${1:-1}
     local max_offset=$(get_max_scroll_offset)
+    local old_offset=$scroll_offset
 
     scroll_offset=$((scroll_offset + amount))
     if [ $scroll_offset -gt $max_offset ]; then
         scroll_offset=$max_offset
     fi
+
+    [[ $old_offset -ne $scroll_offset ]]
 }
 
 # Movimento do scroll para o início:

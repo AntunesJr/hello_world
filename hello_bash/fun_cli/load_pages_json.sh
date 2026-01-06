@@ -7,7 +7,7 @@
 # Função que carrega pąginas:
 load_pages_json(){
 
-    local json_file="${SCRIPT_DIR}/pages/pages.json"
+    local json_file="${SCRIPT_DIR}/json/pages.json"
     
     if ! command -v jq &> /dev/null; then
         echo "Erro: 'jq' não está instalado."
